@@ -28,4 +28,3 @@ It also supports exporting data to popular documentation platforms and formats, 
     ```shell
     docker-compose up -d
     ``` 
-     
