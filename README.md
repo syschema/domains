@@ -17,7 +17,15 @@ It also supports exporting data to popular documentation platforms and formats, 
 
 ## Installation as Hosted Service
 
-```shell
-wget https://github.com/syschema/domains/docker-compose.yml
-docker-compose up -d
-```
+- Load the docker-compose file and the environment file:
+    ```shell
+    curl -O https://raw.githubusercontent.com/syschema/domains/main/docker-compose.yml
+    curl -O https://raw.githubusercontent.com/syschema/domains/main/.env 
+    ```
+- Edit the `.env` file to set mail server settings and other configurations.
+
+- Start the service:
+    ```shell
+    docker-compose up -d
+    ``` 
+     
