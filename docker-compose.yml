@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27018:27017"
+    networks:
+      - syschema
+
+  backend:
+    image: syschema/domains-api
+    container_name: domains-api
+    env_file: .env
+    networks:
+      - syschema
+    depends_on:
+      - mongo
+
+  frontend:
+    image: syschema/domains-ui
+    container_name: domains-ui
+    ports:
+      - "3000:3005"
+    networks:
+      - syschema
+    environment:
+      - API_URL=http://domains-api:8080
+
+volumes:
+  mongo_data:
+
+networks:
+  syschema:
+    driver: bridge
