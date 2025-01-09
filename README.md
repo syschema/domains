@@ -16,26 +16,24 @@ It also supports exporting data to popular documentation platforms and formats, 
 
 ## Installation as Hosted Service
 
-
+- Load the .env file sample and set mongodb connection URL and mail server settings:
 ```shell
-docker run --rm -d \
-  --name syschema-domains \
-  --network host \
-  -p 8080:8080 \
-  -e DB_CONNECTION_URL=mongodb://localhost:27017/syschema \
-  -e MAIL_HOST=mail.vmailhost.com \
-  syschema/domains
+curl -O https://raw.githubusercontent.com/syschema/domains/main/.env 
+````
+- Start service docker container on 8080 port:
+```shell
+docker run --rm -d --env-file .env --name syschema-domains -p 8080:8080 syschema/domains 
 ```
 
-- Load the docker-compose file and the environment file:
-    ```shell
-    mkdir syschema-domains && cd syschema-domains
-    curl -O https://raw.githubusercontent.com/syschema/domains/main/docker-compose.yml
-    curl -O https://raw.githubusercontent.com/syschema/domains/main/.env 
-    ```
-- Edit the `.env` file to set mail server settings and other configurations.
+- Open the service in your browser: [http://localhost:8080](http://localhost:8080)  
 
-- Start the service:
-    ```shell
-    docker-compose up -d
-    ``` 
+
+- Start agents (one in corporate intranet and one in public cloud) to collect data:
+```shell
+docker run --rm -d --name syschema-agent -e COMMANDS_URL='<URL from Settings Screen>' syschema/agent 
+```
+
+
+
+
+ 
