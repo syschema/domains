@@ -1,0 +1,57 @@
+syschema-pre:
+  stage: .pre
+  image: centos
+  allow_failure: true
+  rules:
+    - exists:
+        - syschema.yaml
+  before_script:
+    - |
+      ls
+      echo "Uploading meta file to ${SYSCHEMA_URL}"
+      code_files=$(find ./ -not -path "./node_modules/*" -regex ".*\.\(go\|py\|java\|kt\|php\|js\|ts\|cs\|jsx\|tsx\)" -type f)
+      code_count_files=$(ls $code_files | wc -l)
+      echo $code_count_files
+      code_count_lines=$(cat $code_files | wc -l)
+      echo $code_count_lines
+      code_count_words=$(cat $code_files | wc -w)
+      [[ -f README.md ]] && export readme_words=$(cat README.md | wc -w)
+    - |
+      cat >> syschema.yaml << EOF
+
+      variables:
+        REPOSITORY_URL: ${CI_PROJECT_URL}
+        SRC_LANGUAGE: ${CI_PROJECT_REPOSITORY_LANGUAGES%%,*}
+        SRC_FILES: ${code_count_files}
+        SRC_LINES: ${code_count_lines}
+        SRC_WORDS: ${code_count_words}
+        README_WORDS: ${readme_words}
+        COMMIT_BRANCH: "${CI_COMMIT_BRANCH}"
+        COMMIT_USER_EMAIL: "${GITLAB_USER_EMAIL}"
+        COMMIT_MESSAGE: "${CI_COMMIT_MESSAGE}"
+        COMMIT_SHA: "${CI_COMMIT_SHA}"
+        DEFAULT_BRANCH: "${CI_DEFAULT_BRANCH}"
+        CI_COMMIT_AUTHOR: "${CI_COMMIT_AUTHOR}"
+      EOF
+    - |
+  script:
+    - curl -sfi  -H "Authorization:${SYSCHEMA_API_KEY}" -F file=@syschema.yaml ${SYSCHEMA_URL}/api/components/yaml
+
+syschema-post:
+  stage: .post
+  image: centos
+  allow_failure: true
+  rules:
+    - exists:
+        - syschema.yaml
+  script:
+    - |
+      echo "Sending deployment event info to ${SYSCHEMA_URL}"
+      curl -i  -X POST ${SYSCHEMA_URL}/api/activity/deployments -d '{"REPOSITORY_URL":"'"$CI_PROJECT_URL"'",  "COMMIT_USER_EMAIL":"'"$GITLAB_USER_EMAIL"'", "COMMIT_BRANCH":"'"$CI_COMMIT_BRANCH"'", "COMMIT_SHA":"'"$CI_COMMIT_SHA"'"}' -H "Content-Type:application/json" -H "Authorization:${SYSCHEMA_API_KEY}"
+  needs:
+    - job: build
+      optional: true
+    - job: test
+      optional: true
+    - job: deploy
+      optional: true
