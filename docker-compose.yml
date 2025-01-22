@@ -13,9 +13,11 @@ services:
       - syschema
 
   backend:
-    image: syschema/domains-api
-    container_name: domains-api
+    image: syschema/domains
+    container_name: syschema-domains
     env_file: .env
+    ports:
+      - "8080:8080"
     networks:
       - syschema
     depends_on:
