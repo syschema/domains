@@ -20,13 +20,14 @@ It also supports exporting data to popular documentation platforms and formats, 
 ```shell
 curl -O https://raw.githubusercontent.com/syschema/domains/main/.env 
 ````
-- Start service docker container on 8080 port:
+- Start Domains service on 8080 port:
 ```shell
 docker run --rm -d --name syschema-domains --network host --env-file .env syschema/domains 
 ```
 
+- Start Components service on 8080 port:
 ```shell
-docker run --rm -d --name syschema-components --network host -e PORT=8081 -e DATABASE_CONNECTION_URL=mongodb://127.0.0.1:27017/syschema -e UI_URL=https://domains.syschema.com -e PLUGINS_API_URL=http://localhost:3001 syschema/components
+docker run --rm -d --name syschema-components --network host --env-file .env -e PORT=8081 syschema/components
 ```
 - Open the service in your browser: [http://localhost:8080](http://localhost:8080)  
 
