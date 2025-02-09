@@ -28,6 +28,13 @@ services:
     depends_on:
       - syschema-domains
 
+  syschema-plugins:
+    image: syschema/plugins
+    container_name: syschema-plugins
+    env_file: .env
+    networks:
+      - syschema
+
   syschema-domains-ui:
     image: syschema/domains-ui
     container_name: syschema-domains-ui
@@ -60,6 +67,8 @@ services:
     container_name: syschema
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - syschema
     ports:
       - "8080:80"
 
