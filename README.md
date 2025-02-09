@@ -22,18 +22,14 @@ curl -O https://raw.githubusercontent.com/syschema/domains/main/.env
 ````
 - Start Domains service on 8080 port:
 ```shell
-docker run --rm -d --name syschema-domains --network host --env-file .env syschema/domains 
+docker-compose up -d
 ```
 
-- Start Components service on 8080 port:
-```shell
-docker run --rm -d --name syschema-components --network host --env-file .env -e PORT=8081 syschema/components
-```
+ 
 - Open the service in your browser: [http://localhost:8080](http://localhost:8080)  
 
 
-
-- Start agents (one in corporate intranet and one in public cloud) to collect data:
+- Start agent (one in corporate intranet and one in public cloud) to collect data:
 ```shell
 docker run --rm -d --name syschema-agent -e COMMANDS_URL='<URL from Settings Screen>' syschema/agent 
 ```

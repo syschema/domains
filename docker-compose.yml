@@ -1,37 +1,66 @@
-version: '3.8'
-
 services:
 
-  mongo:
+  syschema-mongo:
     image: mongo:latest
-    container_name: mongo
+    container_name: syschema-mongo
+    ports:
+      - "27017:27017"
     volumes:
       - mongo_data:/data/db
-#    ports:
-#      - "27017:27017"
     networks:
       - syschema
 
-  backend:
+  syschema-domains:
     image: syschema/domains
     container_name: syschema-domains
     env_file: .env
-    ports:
-      - "8080:8080"
     networks:
       - syschema
     depends_on:
-      - mongo
+      - syschema-mongo
 
-  frontend:
-    image: syschema/domains-ui
-    container_name: domains-ui
-    ports:
-      - "3005:3005"
+  syschema-agent:
+    image: syschema/agent
+    container_name: syschema-agent
+    env_file: .env
     networks:
       - syschema
-    environment:
-      - API_URL=http://domains-api:8080
+    depends_on:
+      - syschema-domains
+
+  syschema-domains-ui:
+    image: syschema/domains-ui
+    container_name: syschema-domains-ui
+    networks:
+      - syschema
+
+  syschema-components:
+    image: syschema/components
+    container_name: syschema-components
+    env_file: .env
+    networks:
+      - syschema
+    depends_on:
+      - syschema-mongo
+
+  syschema-components-ui:
+    image: syschema/components-ui
+    container_name: syschema-components-ui
+    networks:
+      - syschema
+
+  plantuml:
+    image: plantuml/plantuml-server:jetty
+    container_name: plantuml
+    networks:
+      - syschema
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "8080:80"
 
 volumes:
   mongo_data:
