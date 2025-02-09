@@ -16,16 +16,19 @@ It also supports exporting data to popular documentation platforms and formats, 
 
 ## Installation as Hosted Service
 
-- Load the .env file sample and set mongodb connection URL and mail server settings:
+- Load initial configuration from the repository:
 ```shell
 curl -O https://raw.githubusercontent.com/syschema/domains/main/.env 
+curl -O https://raw.githubusercontent.com/syschema/domains/main/nginx.conf 
+curl -O https://raw.githubusercontent.com/syschema/domains/main/docker-compose.yml 
 ````
-- Start Domains service on 8080 port:
+- Change the .env file sample  with your server settings
+
+- Start service on 8080 port:
 ```shell
 docker-compose up -d
 ```
 
- 
 - Open the service in your browser: [http://localhost:8080](http://localhost:8080)  
 
 
