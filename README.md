@@ -16,14 +16,20 @@ It also supports exporting data to popular documentation platforms and formats, 
 
 ## Installation as Hosted Service
 
-- Load initial configuration from the repository:
+### Requirements
+- Docker and Docker Compose installed
+- CPU: 2 cores, RAM: 4GB, Disk: 10GB
+
+### Installation
+
+- Load initial configuration:
 ```shell
 mkdir -p /opt/syschema && cd /opt/syschema
 curl -O https://raw.githubusercontent.com/syschema/domains/main/.env 
 curl -O https://raw.githubusercontent.com/syschema/domains/main/nginx.conf 
 curl -O https://raw.githubusercontent.com/syschema/domains/main/docker-compose.yml 
 ````
-- Change the .env file sample  with your server settings
+- Change the .env file sample with your server settings 
 
 - Start service on 8080 port:
 ```shell
@@ -32,6 +38,7 @@ docker-compose up -d
 
 - Open the service in your browser: [http://localhost:8080](http://localhost:8080)  
 
+### Remote Agent Installation
 
 - Start agent (one in corporate intranet and one in public cloud) to collect data:
 ```shell
