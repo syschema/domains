@@ -71,6 +71,11 @@ services:
       - syschema
     ports:
       - "8080:80"
+    depends_on:
+      - syschema-domains
+      - syschema-components
+      - syschema-domains-ui
+      - syschema-components-ui
 
 volumes:
   mongo_data:
