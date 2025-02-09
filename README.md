@@ -18,6 +18,7 @@ It also supports exporting data to popular documentation platforms and formats, 
 
 - Load initial configuration from the repository:
 ```shell
+mkdir -p /opt/syschema && cd /opt/syschema
 curl -O https://raw.githubusercontent.com/syschema/domains/main/.env 
 curl -O https://raw.githubusercontent.com/syschema/domains/main/nginx.conf 
 curl -O https://raw.githubusercontent.com/syschema/domains/main/docker-compose.yml 
